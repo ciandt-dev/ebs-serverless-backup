@@ -22,7 +22,7 @@
 			}
   		}
 	},
-        "EbsBackupSPRole" : {
+        "EbsBackupVirginiaRole" : {
             "Type" : "AWS::IAM::Role",
             "Properties" : {
                 "AssumeRolePolicyDocument" : {
@@ -44,16 +44,16 @@
                 "Path"                     : "/"
             }
         },
-        "EbsBackupSPPolicy" : {
+        "EbsBackupVirginiaPolicy" : {
             "DependsOn" : [
-                "EbsBackupSPRole"
+                "EbsBackupVirginiaRole"
             ],
             "Type"      : "AWS::IAM::Policy",
             "Properties" : {
-                "PolicyName" : "ebs-backup-sp-role",
+                "PolicyName" : "ebs-backup-virginia-role",
                 "Roles"      : [
                     {
-                        "Ref" : "EbsBackupSPRole"
+                        "Ref" : "EbsBackupVirginiaRole"
                     }
                 ],
                 "PolicyDocument" : {
@@ -86,11 +86,11 @@
                 }
             }
         },
-        "EbsBackupSPFunction" : {
+        "EbsBackupVirginiaFunction" : {
             "Type" : "AWS::Lambda::Function",
             "DependsOn" : [
-                "EbsBackupSPRole",
-                "EbsBackupSPPolicy"
+                "EbsBackupVirginiaRole",
+                "EbsBackupVirginiaPolicy"
             ],
             "Properties" : {
                 "Code" : {
@@ -101,7 +101,7 @@
                 },
                 "Role" : {
                     "Fn::GetAtt" : [
-                        "EbsBackupSPRole",
+                        "EbsBackupVirginiaRole",
                         "Arn"
                     ]
                 },
@@ -111,11 +111,11 @@
                 "MemorySize" : 128
             }
         },
-        "EbsBackupJanitorSPFunction" : {
+        "EbsBackupJanitorVirginiaFunction" : {
             "Type" : "AWS::Lambda::Function",
             "DependsOn" : [
-                "EbsBackupSPRole",
-                "EbsBackupSPPolicy"
+                "EbsBackupVirginiaRole",
+                "EbsBackupVirginiaPolicy"
             ],
             "Properties" : {
                 "Code" : {
@@ -126,7 +126,7 @@
                 },
                 "Role" : {
                     "Fn::GetAtt" : [
-                        "EbsBackupSPRole",
+                        "EbsBackupVirginiaRole",
                         "Arn"
                     ]
                 },
@@ -136,7 +136,7 @@
                 "MemorySize" : 128
             }
         },
-        "EbsBackupSPAlarm"           : {
+        "EbsBackupVirginiaAlarm"           : {
             "Type" : "AWS::CloudWatch::Alarm",
             "Properties" : {
                 "AlarmName" : {
@@ -145,7 +145,7 @@
                         [
                             "EBS Backup Lambda Function Failure on SaoPaulo Region",
                             {
-                                "Ref" : "EbsBackupSPFunction"
+                                "Ref" : "EbsBackupVirginiaFunction"
                             }
                         ]
                     ]
@@ -173,14 +173,14 @@
                     {
                         "Name" : "FunctionName",
                         "Value" : {
-                            "Ref" : "EbsBackupSPFunction"
+                            "Ref" : "EbsBackupVirginiaFunction"
                         }
                     }
                 ],
                 "ComparisonOperator" : "GreaterThanOrEqualToThreshold"
             }
         },
-        "EbsJanitorSPAlarm"          : {
+        "EbsJanitorVirginiaAlarm"          : {
             "Type" : "AWS::CloudWatch::Alarm",
             "Properties" : {
                 "AlarmName" : {
@@ -189,7 +189,7 @@
                         [
                             "EBS Backup Lambda Function Failure on SaoPaulo Region",
                             {
-                                "Ref" : "EbsBackupJanitorSPFunction"
+                                "Ref" : "EbsBackupJanitorVirginiaFunction"
                             }
                         ]
                     ]
@@ -217,7 +217,7 @@
                     {
                         "Name" : "FunctionName",
                         "Value" : {
-                            "Ref" : "EbsBackupJanitorSPFunction"
+                            "Ref" : "EbsBackupJanitorVirginiaFunction"
                         }
                     }
                 ],
